@@ -1,0 +1,49 @@
+<?php 
+function login_agree_form_alter(&$form, &$form_state, $form_id) {
+	if($form_id == 'user_register_form') {
+		
+
+		$form['agree'] = array(
+			'#type' => 'radios',
+			'#title' => 'Agreement',
+			'#default_value' => 0, 
+			'#options' => array(t('I Dis Agree'), t('I Agree')),
+			'#description' => t('my site is %site-email', array('%site-email'=> variable_get('site_mail','drpl'))),
+		);
+
+		$form['#validate'][] = 'login_user_validate';
+	}
+}
+
+function login_user_validate($form, &$form_state) {
+	//echo "<pre>";
+	if($form_state['input']['agree'] <> 1) {
+		form_set_error('agree', t('You must choose Agree'));
+	} else {
+		watchdog('user', t('user gart tem form'));
+	}
+
+
+	$name1 = $form_state['values']['name'];
+	if(!preg_match('/^[a-z]+$/', $name1)) {
+		form_set_error('name', t('User name is only text'));
+	}
+}
+
+
+
+ /** 
+ * Form validation handler for the current password on the user_account_form(). 
+ * 
+ * @see user_account_form() 
+ */ /*
+function legalagree_user_form_validate($form, &$form_state) { 
+  global $user; 
+ // Did user agree?   
+ if ($form_state['input']['decision'] <> 1) {  
+    form_set_error('decision', t('You must agree to the Legal Agreement before registration 
+can be completed.')); 
+  } else {  
+     watchdog('user', t('User %user agreed to legal terms', array('%user' => $user->name))); 
+  } 
+} */
